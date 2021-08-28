@@ -6,7 +6,7 @@ let generate_impl ~ctxt:_ (_rec_flag, _type_declarations) = assert false
 
 let core_type_decl { txt; loc } = ptyp_constr ~loc { loc; txt = lident txt } []
 
-let generate_of_type_function { ptype_loc = loc; ptype_name; _ } =
+let gen_env_of_t { ptype_loc = loc; ptype_name; _ } =
   psig_value ~loc
     {
       pval_name = { ptype_name with txt = "env_of_" ^ ptype_name.txt };
@@ -17,7 +17,7 @@ let generate_of_type_function { ptype_loc = loc; ptype_name; _ } =
       pval_prim = [];
     }
 
-let generate_of_env_function { ptype_loc = loc; ptype_name; _ } =
+let gen_t_of_env { ptype_loc = loc; ptype_name; _ } =
   psig_value ~loc
     {
       pval_name = { ptype_name with txt = ptype_name.txt ^ "_of_env" };
@@ -28,10 +28,7 @@ let generate_of_env_function { ptype_loc = loc; ptype_name; _ } =
     }
 
 let generate_functions_intf type_declaration =
-  [
-    generate_of_env_function type_declaration;
-    generate_of_type_function type_declaration;
-  ]
+  [ gen_t_of_env type_declaration; gen_env_of_t type_declaration ]
 
 let generate_intf ~ctxt (_rec_flag, type_declarations) =
   let loc = Expansion_context.Deriver.derived_item_loc ctxt in
