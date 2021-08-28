@@ -4,28 +4,24 @@ open Ast_builder.Default
 
 let generate_impl ~ctxt:_ (_rec_flag, _type_declarations) = assert false
 
+let core_type_decl { txt; loc } = ptyp_constr ~loc { loc; txt = lident txt } []
+
 let generate_of_type_function { ptype_loc = loc; ptype_name; _ } =
-  let env_assoc_list = [%type: (string * string) list] in
   psig_value ~loc
     {
       pval_name = { ptype_name with txt = "env_of_" ^ ptype_name.txt };
       pval_type =
-        ptyp_arrow ~loc Nolabel
-          (ptyp_constr ~loc { loc; txt = lident ptype_name.txt } [])
-          env_assoc_list;
+        [%type: [%t core_type_decl ptype_name] -> (string * string) list];
       pval_loc = loc;
       pval_attributes = [];
       pval_prim = [];
     }
 
 let generate_of_env_function { ptype_loc = loc; ptype_name; _ } =
-  let unit = [%type: unit] in
   psig_value ~loc
     {
       pval_name = { ptype_name with txt = ptype_name.txt ^ "_of_env" };
-      pval_type =
-        ptyp_arrow ~loc Nolabel unit
-          (ptyp_constr ~loc { loc; txt = lident ptype_name.txt } []);
+      pval_type = [%type: unit -> [%t core_type_decl ptype_name]];
       pval_loc = loc;
       pval_attributes = [];
       pval_prim = [];
