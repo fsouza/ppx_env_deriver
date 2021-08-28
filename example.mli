@@ -1,0 +1,1 @@
+type person [@@deriving env]

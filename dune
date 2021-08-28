@@ -1,0 +1,14 @@
+(library
+ (public_name ppx_env_deriver)
+ (kind ppx_deriver)
+ (modules ppx_env_deriver)
+ (preprocess
+  (pps ppxlib.metaquot))
+ (libraries ppxlib str))
+
+(library
+ (name example)
+ (modules example)
+ (libraries ppx_env_deriver)
+ (preprocess
+  (pps ppx_env_deriver)))
