@@ -5,10 +5,3 @@
  (preprocess
   (pps ppxlib.metaquot))
  (libraries ppxlib str))
-
-(library
- (name example)
- (modules example)
- (libraries ppx_env_deriver)
- (preprocess
-  (pps ppx_env_deriver)))
